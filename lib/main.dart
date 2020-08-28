@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'graphQLBloc/Simple_delegate.dart';
-import 'graphQLBloc/GraphQLBloc.dart';
-import 'graphQLBloc/GraphQLEvents.dart';
-import 'graphQLBloc/GraphQLStates.dart';
+// import 'graphQLBloc/GraphQLBloc.dart';
+// import 'graphQLBloc/GraphQLEvents.dart';
+// import 'graphQLBloc/GraphQLStates.dart';
 
-// import 'pages/CreateZonePage.dart';
+import 'pages/ZoneMaker.dart';
 // import 'pages/CreateItemPage.dart';
 // import 'pages/AllZonesPage.dart';
 
@@ -15,35 +15,16 @@ void main() {
   runApp(MyApp());
 }
 
-String query = r'''
-  query{
-  getAllZones{
-    id
-    name
-    mac
-    items{
-      id
-      name
-    }
-  }
-}
-''';
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: BlocProvider(
-        create: (BuildContext context) =>
-            GraphQLBloc()..add(FetchGQLData(query)),
-        child: MyHomePage(title: 'LOCS Science Center Manager App'),
-      ),
-    );
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: MyHomePage(title: "LOCS Science Center Manager"));
   }
 }
 
@@ -56,8 +37,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List data = [];
-
   @override
   void initState() {
     super.initState();
@@ -71,59 +50,32 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GraphQLBloc, GraphQLStates>(
-      builder: (BuildContext context, GraphQLStates state) {
-        if (state is Loading) {
-          return Scaffold(
-            appBar: _buildAppBar(),
-            body: LinearProgressIndicator(),
-          );
-        } else if (state is LoadDataFail) {
-          return Scaffold(
-            appBar: _buildAppBar(),
-            body: Center(child: Text(state.error)),
-          );
-        } else {
-          data = (state as LoadDataSuccess).data['getAllZones'];
-          return Scaffold(
-            appBar: _buildAppBar(),
-            body: _buildBody(),
-          );
-        }
-      },
+    return Scaffold(
+      appBar: _buildAppBar(),
+      body: _buttons(),
     );
   }
 
-  Widget _buildBody() {
-    return Container(
-      child: ListView.builder(
-        itemCount: data.length,
-        itemBuilder: (BuildContext context, int index) {
-          var item = data[index];
-          return Card(
-            elevation: 4.0,
-            margin: EdgeInsets.all(8.0),
-            child: ListTile(
-              leading: Text(item['id']),
-              title: Text(item['name']),
-              trailing: Container(
-                padding: EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(32.0),
-                ),
-                child: Text(
-                  item['items'][0]["name"],
-                ),
-              ),
-            ),
-          );
-        },
-      ),
+  Widget _buttons() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        RaisedButton(
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => ZoneMaker()));
+          },
+          child: Text("Zone Maker"),
+        ),
+        RaisedButton(
+          onPressed: null,
+          child: Text("Item Maker"),
+        ),
+        RaisedButton(
+          onPressed: null,
+          child: Text("show all Zones"),
+        ),
+      ],
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }

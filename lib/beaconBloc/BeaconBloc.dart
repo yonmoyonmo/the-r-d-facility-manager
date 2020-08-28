@@ -1,5 +1,5 @@
 import 'dart:async';
-// import 'BeaconEvent.dart';
+import 'BeaconEvent.dart';
 import 'dart:io';
 import 'package:flutter_beacon/flutter_beacon.dart';
 
@@ -10,6 +10,7 @@ class BeaconBloc {
   final _beacons = <Beacon>[];
   bool authorizationStatusOk = false;
   bool locationServiceEnabled = false;
+
   bool bluetoothEnabled = false;
 
   final _beaconStateStreamController = StreamController<BluetoothState>();
@@ -32,13 +33,15 @@ class BeaconBloc {
   Stream<double> get accStream => _accStream.stream;
   StreamSink<double> get accSink => _accStream.sink;
 
-  // final _beaconEventController = StreamController<BeaconEvent>();
-  // Sink<BeaconEvent> get beaconEventSink => _beaconEventController.sink;
+  final _beaconEventController = StreamController<BeaconEvent>();
+  Sink<BeaconEvent> get beaconEventSink => _beaconEventController.sink;
 
   BeaconBloc() {
     _streamBluetooth = flutterBeacon
         .bluetoothStateChanged()
         .listen((BluetoothState state) async {
+      if (!authorizationStatusOk) await flutterBeacon.requestAuthorization;
+      if (!bluetoothEnabled) await flutterBeacon.bluetoothState;
       print('BluetoothState = $state');
       stateSink.add(state);
       switch (state) {
@@ -54,18 +57,13 @@ class BeaconBloc {
   }
   checkAllRequirements() async {
     final bluetoothState = await flutterBeacon.bluetoothState;
-    //상태를 확인하고
     final bluetoothEnabled = bluetoothState == BluetoothState.stateOn;
-    //true or false
     final authorizationStatus = await flutterBeacon.authorizationStatus;
-    //마법으로 허가를 요청함
     final authorizationStatusOk =
         authorizationStatus == AuthorizationStatus.allowed ||
             authorizationStatus == AuthorizationStatus.always;
-    //true of false
     final locationServiceEnabled =
         await flutterBeacon.checkLocationServicesIfEnabled;
-    //상태 바까줌
     this.authorizationStatusOk = authorizationStatusOk;
     this.locationServiceEnabled = locationServiceEnabled;
     this.bluetoothEnabled = bluetoothEnabled;
@@ -146,7 +144,7 @@ class BeaconBloc {
 
   dispose() {
     _beaconStreamController?.close();
-    // _beaconEventController?.close();
+    _beaconEventController?.close();
     _beaconStateStreamController?.close();
     _macStream?.close();
     _majStream.close();
