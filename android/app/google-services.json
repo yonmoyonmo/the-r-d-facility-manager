@@ -1,0 +1,32 @@
+{
+    "project_info": {
+        "project_number": "505812332278",
+        "firebase_url": "https://science-center-manager.firebaseio.com",
+        "project_id": "science-center-manager",
+        "storage_bucket": "science-center-manager.appspot.com"
+    },
+    "client": [{
+        "client_info": {
+            "mobilesdk_app_id": "1:505812332278:android:4a2288d11ccffae85146d7",
+            "android_client_info": {
+                "package_name": "com.example.science_center_manager"
+            }
+        },
+        "oauth_client": [{
+            "client_id": "505812332278-q9bnjq8ec1t33gf905fnnbkav7ejl929.apps.googleusercontent.com",
+            "client_type": 3
+        }],
+        "api_key": [{
+            "current_key": "AIzaSyAxBYC1LIxe4uDzUWjed8QwOMugMmeZXNY"
+        }],
+        "services": {
+            "appinvite_service": {
+                "other_platform_oauth_client": [{
+                    "client_id": "505812332278-q9bnjq8ec1t33gf905fnnbkav7ejl929.apps.googleusercontent.com",
+                    "client_type": 3
+                }]
+            }
+        }
+    }],
+    "configuration_version": "1"
+}
