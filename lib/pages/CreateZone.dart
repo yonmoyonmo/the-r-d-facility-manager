@@ -41,9 +41,14 @@ class _CreateZoneState extends State<CreateZone> {
         } else {
           data = (state as LoadDataSuccess).data['createZone'];
           print(data);
-          return Scaffold(
-            appBar: _buildAppBar(),
-            body: _buildBody(),
+          return WillPopScope(
+            onWillPop: () async {
+              return false;
+            },
+            child: Scaffold(
+              appBar: _buildAppBar(),
+              body: _buildBody(),
+            ),
           );
         }
       },
@@ -59,9 +64,18 @@ class _CreateZoneState extends State<CreateZone> {
           Text(data['name'].toString()),
           Text(data['mac'].toString()),
           Text(data['major'].toString()),
+          RaisedButton(
+            onPressed: () => _backToHome(),
+            child: Text("return to home page"),
+          ),
         ],
       ),
     );
+  }
+
+  void _backToHome() {
+    Navigator.popUntil(
+        context, ModalRoute.withName(Navigator.defaultRouteName));
   }
 
   @override

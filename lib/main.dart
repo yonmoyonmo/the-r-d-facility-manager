@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'graphQLBloc/Simple_delegate.dart';
-// import 'graphQLBloc/GraphQLBloc.dart';
-// import 'graphQLBloc/GraphQLEvents.dart';
-// import 'graphQLBloc/GraphQLStates.dart';
 
 import 'pages/ZoneMaker.dart';
 // import 'pages/CreateItemPage.dart';

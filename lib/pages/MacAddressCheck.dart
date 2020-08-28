@@ -2,14 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../graphQLBloc/GraphQLBloc.dart';
 import '../graphQLBloc/GraphQLStates.dart';
+import '../graphQLBloc/GraphQLEvents.dart';
+import 'CreateZone.dart';
 
 class MacAddressCheck extends StatefulWidget {
-  MacAddressCheck() {}
+  String query;
+  MacAddressCheck(String _query) {
+    query = _query;
+  }
   @override
-  _MacAddressCheckState createState() => _MacAddressCheckState();
+  _MacAddressCheckState createState() => _MacAddressCheckState(query);
 }
 
 class _MacAddressCheckState extends State<MacAddressCheck> {
+  String query;
+  _MacAddressCheckState(String _query) {
+    query = _query;
+  }
   Map<String, dynamic> data;
 
   @override
@@ -35,8 +44,23 @@ class _MacAddressCheckState extends State<MacAddressCheck> {
         } else if (state is LoadDataFail) {
           return Scaffold(
               appBar: _buildAppBar(),
-              body: Center(
-                child: Text(state.error.toString() + "\n아직 등록되지 않은 비콘이라는 뜻."),
+              body: Column(
+                children: [
+                  Text(state.error.toString() + "\n아직 등록되지 않은 비콘이라는 뜻."),
+                  RaisedButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return BlocProvider<GraphQLBloc>(
+                          create: (BuildContext context) =>
+                              GraphQLBloc()..add(FetchGQLData(query)),
+                          child: CreateZone(),
+                        );
+                      }));
+                    },
+                    child: Text("Create Zone with current data"),
+                  ),
+                ],
               ));
         } else {
           data = (state as LoadDataSuccess).data['getOneZone'];
@@ -60,7 +84,6 @@ class _MacAddressCheckState extends State<MacAddressCheck> {
           Text(data['mac'].toString()),
           Text(data['major'].toString()),
           Text("이미 등록된 비콘입니다."),
-          Text("또 등록 해도 상관 없지만 안하는게 나을듯?"),
         ],
       ),
     );

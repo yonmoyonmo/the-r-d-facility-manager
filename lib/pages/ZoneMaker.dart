@@ -114,19 +114,6 @@ class _ZoneMakerState extends State<ZoneMaker> {
                         ),
                         RaisedButton(
                           onPressed: () {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return BlocProvider<GraphQLBloc>(
-                                create: (BuildContext context) =>
-                                    GraphQLBloc()..add(FetchGQLData(query)),
-                                child: CreateZone(),
-                              );
-                            }));
-                          },
-                          child: Text("Create Zone with current data"),
-                        ),
-                        RaisedButton(
-                          onPressed: () {
                             setState(() {
                               print(major);
                               query2 =
@@ -137,7 +124,7 @@ class _ZoneMakerState extends State<ZoneMaker> {
                               return BlocProvider<GraphQLBloc>(
                                 create: (BuildContext context) =>
                                     GraphQLBloc()..add(FetchGQLData(query2)),
-                                child: MacAddressCheck(),
+                                child: MacAddressCheck(query),
                               );
                             }));
                           },
