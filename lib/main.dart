@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'graphQLBloc/Simple_delegate.dart';
 
 import 'pages/ZoneMaker.dart';
-// import 'pages/CreateItemPage.dart';
+import 'pages/ItemMaker.dart';
 // import 'pages/AllZonesPage.dart';
 
 void main() {
@@ -65,7 +65,10 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Text("Zone Maker"),
         ),
         RaisedButton(
-          onPressed: null,
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => ItemMaker()));
+          },
           child: Text("Item Maker"),
         ),
         RaisedButton(

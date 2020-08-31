@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../beaconBloc/BeaconBloc.dart';
 import '../graphQLBloc/GraphQLBloc.dart';
 import '../graphQLBloc/GraphQLEvents.dart';
-import 'CreateZone.dart';
 import 'MacAddressCheck.dart';
 
 class ZoneMaker extends StatefulWidget {
