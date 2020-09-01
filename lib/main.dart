@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'graphQLBloc/Simple_delegate.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import './graphQLBloc/GraphQLBloc.dart';
+import './graphQLBloc/GraphQLEvents.dart';
 
 import 'pages/ZoneMaker.dart';
 import 'pages/ItemMaker.dart';
-// import 'pages/AllZonesPage.dart';
+import 'pages/AllZones.dart';
 
 void main() {
   BlocSupervisor.delegate = MySimpleBlocDelegate();
@@ -34,6 +38,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  String query = r'''
+    query{
+    getAllZones{
+      name
+      mac
+      major
+    }
+  ''';
+
   @override
   void initState() {
     super.initState();
@@ -72,7 +85,15 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Text("Item Maker"),
         ),
         RaisedButton(
-          onPressed: null,
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return BlocProvider<GraphQLBloc>(
+                create: (BuildContext context) =>
+                    GraphQLBloc()..add(FetchGQLData(query)),
+                child: AllZones(),
+              );
+            }));
+          },
           child: Text("show all Zones"),
         ),
       ],

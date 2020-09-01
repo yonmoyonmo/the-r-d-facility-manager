@@ -31,9 +31,6 @@ class _ItemMakerState extends State<ItemMaker> {
   String allZonesQuery = r'''
   query{
     getAllZones{
-      zone{
-        name
-      }
       id
       name
     }
