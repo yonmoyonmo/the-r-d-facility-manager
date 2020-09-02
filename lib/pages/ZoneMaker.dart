@@ -40,6 +40,7 @@ class _ZoneMakerState extends State<ZoneMaker> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Text("Current Beacon"),
           StreamBuilder(
             stream: beaconBloc.beaconStream,
             builder: (context, snapshot) {
@@ -50,6 +51,8 @@ class _ZoneMakerState extends State<ZoneMaker> {
             },
           ),
           Container(
+            height: 50,
+            color: Colors.blue[100],
             alignment: Alignment.center,
             margin: const EdgeInsets.symmetric(horizontal: 8.0),
             child: TextField(

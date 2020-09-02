@@ -80,7 +80,9 @@ class _AllZonesState extends State<AllZones> {
             },
             leading: Text(item['mac']),
             title: Text(item['name']),
-            trailing: Text(item['major'].toString()),
+            trailing: Image(
+              image: NetworkImage(item['map']['mapURL']),
+            ),
           );
         },
       ),

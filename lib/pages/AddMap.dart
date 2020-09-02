@@ -7,27 +7,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:science_center_manager/graphQLBloc/GraphQLStates.dart';
 import '../graphQLBloc/GraphQLBloc.dart';
 import '../graphQLBloc/GraphQLEvents.dart';
-import 'CreateItem.dart';
+import 'CreateMap.dart';
 
-class ItemMaker extends StatefulWidget {
-  ItemMaker({Key key}) : super(key: key);
+class AddMap extends StatefulWidget {
+  AddMap({Key key}) : super(key: key);
 
   @override
-  _ItemMakerState createState() => _ItemMakerState();
+  _AddMapState createState() => _AddMapState();
 }
 
-class _ItemMakerState extends State<ItemMaker> {
-  final TextEditingController _textController = new TextEditingController();
-  final TextEditingController _textController2 = new TextEditingController();
+class _AddMapState extends State<AddMap> {
   File _image;
-
   String _imageURL = "";
   int zoneIdOfthis;
   String name;
   String desc;
-
   List data = [];
-
   String allZonesQuery = r'''
   query{
     getAllZones{
@@ -36,16 +31,7 @@ class _ItemMakerState extends State<ItemMaker> {
     }
   }
   ''';
-
-  String createItemQuery = '';
-
-  void _handleSubmitted1(String text) {
-    name = text;
-  }
-
-  void _handleSubmitted2(String text) {
-    desc = text;
-  }
+  String addMapQuery = '';
 
   Future chooseFile() async {
     await ImagePicker.pickImage(source: ImageSource.gallery).then((image) {
@@ -67,7 +53,7 @@ class _ItemMakerState extends State<ItemMaker> {
           GraphQLBloc()..add(FetchGQLData(allZonesQuery)),
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: AppBar(title: Text("Item Maker")),
+        appBar: AppBar(title: Text("Add Map")),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -93,41 +79,8 @@ class _ItemMakerState extends State<ItemMaker> {
                       _uploadImageToStorage(ImageSource.gallery);
                     },
                   ),
-                  RaisedButton(
-                    child: Text("Camera"),
-                    onPressed: () {
-                      _uploadImageToStorage(ImageSource.camera);
-                    },
-                  )
                 ],
               ),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black),
-                ),
-                alignment: Alignment.center,
-                margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: TextField(
-                  controller: _textController,
-                  onSubmitted: _handleSubmitted1,
-                  decoration: new InputDecoration.collapsed(
-                      hintText: "enter item name"),
-                ),
-              ),
-              Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black),
-                  ),
-                  height: 100,
-                  width: 400,
-                  alignment: Alignment.center,
-                  margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: TextField(
-                    controller: _textController2,
-                    onSubmitted: _handleSubmitted2,
-                    decoration: new InputDecoration.collapsed(
-                        hintText: "enter item description"),
-                  )),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -136,8 +89,8 @@ class _ItemMakerState extends State<ItemMaker> {
                     child: RaisedButton(
                       onPressed: () {
                         setState(() {
-                          createItemQuery =
-                              'mutation{createItem(zoneId:${zoneIdOfthis}, data:{name:"${name}", desc:"${desc}", imageURL:"${_imageURL}"}){id,name,desc,imageURL}}';
+                          addMapQuery =
+                              'mutation{addMap(zoneId:${zoneIdOfthis}, url:"${_imageURL}"){id,mapURL}}';
                         });
                       },
                       child: Text("set query"),
@@ -150,13 +103,13 @@ class _ItemMakerState extends State<ItemMaker> {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
                           return BlocProvider<GraphQLBloc>(
-                            create: (BuildContext context) => GraphQLBloc()
-                              ..add(FetchGQLData(createItemQuery)),
-                            child: CreateItem(),
+                            create: (BuildContext context) =>
+                                GraphQLBloc()..add(FetchGQLData(addMapQuery)),
+                            child: CreateMap(),
                           );
                         }));
                       },
-                      child: Text("Create an item"),
+                      child: Text("Create a Map"),
                     ),
                   ),
                 ],
@@ -164,7 +117,7 @@ class _ItemMakerState extends State<ItemMaker> {
               Container(
                 height: 100,
                 width: 400,
-                child: Text(createItemQuery),
+                child: Text(addMapQuery),
               ),
               BlocBuilder<GraphQLBloc, GraphQLStates>(
                 builder: (BuildContext context, GraphQLStates state) {

@@ -3,14 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../graphQLBloc/GraphQLBloc.dart';
 import '../graphQLBloc/GraphQLStates.dart';
 
-class CreateItem extends StatefulWidget {
-  CreateItem({Key key}) : super(key: key);
+class CreateMap extends StatefulWidget {
+  CreateMap({Key key}) : super(key: key);
 
   @override
-  _CreateItemState createState() => _CreateItemState();
+  _CreateMapState createState() => _CreateMapState();
 }
 
-class _CreateItemState extends State<CreateItem> {
+class _CreateMapState extends State<CreateMap> {
   Map<String, dynamic> data;
 
   @override
@@ -20,7 +20,7 @@ class _CreateItemState extends State<CreateItem> {
 
   AppBar _buildAppBar() {
     return AppBar(
-      title: Text('make an Item'),
+      title: Text('make a Map'),
     );
   }
 
@@ -40,7 +40,7 @@ class _CreateItemState extends State<CreateItem> {
                 child: Text(state.error),
               ));
         } else {
-          data = (state as LoadDataSuccess).data['createItem'];
+          data = (state as LoadDataSuccess).data['addMap'];
           print(data);
           return WillPopScope(
             onWillPop: () async {
@@ -62,11 +62,10 @@ class _CreateItemState extends State<CreateItem> {
       width: 700,
       child: Column(
         children: [
-          Text(data['name'].toString()),
-          Text(data['desc'].toString()),
+          Text(data['id'].toString()),
           Container(
             child: Image(
-              image: NetworkImage(data['imageURL']),
+              image: NetworkImage(data['mapURL']),
             ),
           ),
           RaisedButton(
