@@ -29,9 +29,9 @@ class BeaconBloc {
   Stream<int> get majStream => _majStream.stream;
   StreamSink<int> get majSink => _majStream.sink;
 
-  final _accStream = StreamController<double>();
-  Stream<double> get accStream => _accStream.stream;
-  StreamSink<double> get accSink => _accStream.sink;
+  // final _accStream = StreamController<double>();
+  // Stream<double> get accStream => _accStream.stream;
+  // StreamSink<double> get accSink => _accStream.sink;
 
   final _beaconEventController = StreamController<BeaconEvent>();
   Sink<BeaconEvent> get beaconEventSink => _beaconEventController.sink;
@@ -72,7 +72,7 @@ class BeaconBloc {
   initScanBeacon() async {
     await flutterBeacon.initializeScanning;
     await checkAllRequirements();
-    if (!authorizationStatusOk || //셋 중 하나라도 false?
+    if (!authorizationStatusOk ||
         !locationServiceEnabled ||
         !bluetoothEnabled) {
       print('RETURNED, authorizationStatusOk=$authorizationStatusOk, '
@@ -111,10 +111,11 @@ class BeaconBloc {
         //print(_beacons);
         _beacons.forEach((element) {
           if (element.accuracy < 4) {
+            //얼마나 가까이 와야 하는지를 조절
             beaconSink.add(element);
             macSink.add(element.macAddress);
             majSink.add(element.major);
-            accSink.add(element.accuracy);
+            //accSink.add(element.accuracy);
           }
         });
       }
@@ -148,7 +149,7 @@ class BeaconBloc {
     _beaconStateStreamController?.close();
     _macStream?.close();
     _majStream.close();
-    _accStream.close();
+    //_accStream.close();
     _streamRanging?.cancel();
     _streamBluetooth?.cancel();
     flutterBeacon.close;
