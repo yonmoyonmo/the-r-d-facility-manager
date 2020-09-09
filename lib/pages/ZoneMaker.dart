@@ -20,7 +20,7 @@ class _ZoneMakerState extends State<ZoneMaker> {
   String query = '';
   String query2 = '';
 
-  final TextEditingController _textController = new TextEditingController();
+  final TextEditingController _textController = TextEditingController();
 
   @override
   void dispose() {
